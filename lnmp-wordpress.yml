@@ -1,6 +1,6 @@
 ---
 
-- hosts: lab
+- hosts: lnmp_wordpress
 
   roles:
     - lnmp-wordpress
