@@ -5,11 +5,6 @@
     name: nginx
     state: present
 
-#- name: put test index file
-#  template:
-#    src: files/index.php
-#    dest: /web/public_html/index.php
-  
 - name: Replace nginx config file
   template:
     src: files/nginx.conf.j2
