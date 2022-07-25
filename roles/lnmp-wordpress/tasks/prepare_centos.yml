@@ -9,7 +9,7 @@
     state: latest
 
 - name: Install needful soft
-  yum:
+  dnf:
     name: "{{ item }}"
     state: present
   loop:
