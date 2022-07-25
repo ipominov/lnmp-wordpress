@@ -1,6 +1,0 @@
----
-
-- hosts: lnmp_wordpress
-
-  roles:
-    - lnmp-wordpress
