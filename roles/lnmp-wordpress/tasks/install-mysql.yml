@@ -1,0 +1,32 @@
+---
+
+- name: install mariadb
+  dnf:
+    name: mariadb-server
+    state: present
+
+- name: install pymysql python module via pip
+  pip:
+    name: pymysql
+    state: present
+
+- name: start mariadb service
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Set MariaDB root password for the first time (root@localhost)
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    host: localhost
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
+    state: present
+
+- name: create a new database  
+  mysql_db: 
+    name: wordpress 
+    state: present 
+    login_user: root 
+    login_password: "{{ mysql_root_password }}"  

@@ -1,0 +1,33 @@
+---
+
+#- name: add new user 
+#  user: name="{{ var_login }}" password="{{ var_password }}" home="/home/{{ var_login }}" shell="/bin/bash"
+
+- name: Upgrade all packages
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Install needful soft
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - python3-pip
+    - tar
+
+- name: set selinux permissive mode
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: open http port
+  firewalld:
+    port: 80/tcp
+    permanent: true
+    state: enabled
+
+- name: reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded

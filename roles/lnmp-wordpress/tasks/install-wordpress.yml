@@ -1,0 +1,20 @@
+---
+
+- name: Create a site directory
+  file:
+    path: /web/public_html
+    state: directory
+    owner: nginx
+    group: nginx
+    mode: '0755'
+
+- name: download and unpack Wordpress latest
+  unarchive:
+    src: https://ru.wordpress.org/latest-ru_RU.tar.gz
+    dest: /web/public_html/
+    remote_src: yes
+
+- name: some files changes
+  shell: mv wordpress/* ./ && rm -rf wordpress && chown -R nginx:nginx *
+  args:
+    chdir: /web/public_html

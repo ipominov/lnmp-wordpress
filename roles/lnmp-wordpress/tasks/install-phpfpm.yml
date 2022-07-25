@@ -1,0 +1,28 @@
+---
+
+- name: install php-fpm and modules
+  dnf:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - php-fpm
+    - php-cli
+    - php-mysqli
+    - php-gd
+    - php-ldap
+    - php-odbc
+    - php-opcache
+    - php-pear
+    - php-mbstring
+    - php-snmp
+    - php-soap
+    - php-zip
+
+- name: Replace php-fpm config file
+  copy: src=files/www.conf dest=/etc/php-fpm.d/
+
+- name: start php-fpm service
+  systemd:
+    name: php-fpm
+    state: started
+    enabled: yes
