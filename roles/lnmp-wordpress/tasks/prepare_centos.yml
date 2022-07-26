@@ -1,14 +1,11 @@
 ---
 
-- name: add new user 
-  user: name="igor" password="321654" home="/home/igor" shell="/bin/bash"
-
 - name: Upgrade all packages
   dnf:
     name: '*'
     state: latest
 
-- name: Install needful soft
+- name: Install some packages
   dnf:
     name: "{{ item }}"
     state: present
@@ -16,12 +13,12 @@
     - python3-pip
     - tar
 
-- name: set selinux permissive mode
+- name: Set SELinux permissive mode
   selinux:
     policy: targeted
     state: permissive
 
-- name: open http port
+- name: Open Nginx port
   firewalld:
     port: 80/tcp
     immediate: yes

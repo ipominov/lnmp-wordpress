@@ -1,6 +1,6 @@
 ---
 
-- name: install php-fpm and modules
+- name: Install PHP-FPM and modules for Wordpress
   dnf:
     name: "{{ item }}"
     state: present
@@ -21,7 +21,7 @@
 - name: Replace php-fpm config file
   copy: src=files/www.conf dest=/etc/php-fpm.d/
 
-- name: start php-fpm service
+- name: Start php-fpm service
   systemd:
     name: php-fpm
     state: started

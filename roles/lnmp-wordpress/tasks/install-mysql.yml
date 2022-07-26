@@ -1,49 +1,38 @@
 ---
 
-- name: install mariadb
+- name: Install Mariadb server
   dnf:
     name: mariadb-server
     state: present
 
-- name: Install needful soft
-  dnf:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - python3-pip
-    - tar
-
-- name: install pymysql python module via pip
+- name: Install pymysql python module via pip
   pip:
     name: pymysql
     state: present
 
-- name: start mariadb service
+- name: Start mariadb service
   systemd:
     name: mariadb
     state: started
     enabled: yes
 
-- name: Check if root password is set
+- name: Check if mysql root password is already set
   shell: >
     mysqladmin -u root status
   changed_when: false
   failed_when: false
   register: root_pwd_check
 
-- name: Write root login credentials
-  copy:
+- name: If Mysql root password is no set yet, write root login credentials to ~/.my.chf
+  template:
+    src: my.cnf.j2
     dest: /root/.my.cnf
     owner: root
     group: root
-    mode: 0600
-    content: |
-      [client]
-      login_user=root
-      logib_password={{ mysql_root_password }}
+    mode: '0600'
   when: root_pwd_check.rc == 0
 
-- name: Set MariaDB root password for the first time (root@localhost)
+- name: If Mysql root password is no set yet, do it
   mysql_user:
     name: root
     password: "{{ mysql_root_password }}"
@@ -56,7 +45,7 @@
     - localhost
   when: root_pwd_check.rc == 0
 
-- name: create a new database  
+- name: Create a database for Wordpress installation  
   mysql_db: 
     name: wordpress 
     state: present 
