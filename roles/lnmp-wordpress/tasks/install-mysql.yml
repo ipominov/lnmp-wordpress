@@ -31,6 +31,18 @@
   failed_when: false
   register: root_pwd_check
 
+- name: Write root login credentials
+  copy:
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+    content: |
+      [client]
+      login_user=root
+      logib_password={{ mysql_root_password }}
+  when: root_pwd_check.rc == 0
+
 - name: Set MariaDB root password for the first time (root@localhost)
   mysql_user:
     name: root
@@ -41,7 +53,7 @@
   with_items:
     - ::1
     - 127.0.0.1
-    - "{{ ansible_fqdn }}"
+    - localhost
   when: root_pwd_check.rc == 0
 
 - name: create a new database  
