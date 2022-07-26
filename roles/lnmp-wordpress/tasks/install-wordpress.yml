@@ -1,20 +1,28 @@
 ---
 
-- name: Create a site directory
+- name: Check if Wp directory is alreasy exist (so we know that Wordpress is already installed)
+  stat:
+    path: /web/public_html
+  register: wp_dir
+
+- name: Create a site directory (if not exist yet)
   file:
     path: /web/public_html
     state: directory
     owner: nginx
     group: nginx
     mode: '0755'
+  when: not wp_dir.stat.exists
 
-- name: download and unpack Wordpress latest
+- name: Download and unpack Wordpress latest
   unarchive:
     src: https://ru.wordpress.org/latest-ru_RU.tar.gz
     dest: /web/public_html/
     remote_src: yes
+  when: not wp_dir.stat.exists
 
-- name: some files changes
+- name: Make some files changes
   shell: mv wordpress/* ./ && rm -rf wordpress && chown -R nginx:nginx *
   args:
     chdir: /web/public_html
+  when: not wp_dir.stat.exists

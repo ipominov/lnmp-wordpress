@@ -1,6 +1,6 @@
 ---
 
-- name: install nginx stable
+- name: Install nginx stable
   yum:
     name: nginx
     state: present
@@ -10,7 +10,7 @@
     src: files/nginx.conf.j2
     dest: /etc/nginx/nginx.conf
 
-- name: start nginx service
+- name: Start nginx service
   systemd:
     name: nginx
     state: started

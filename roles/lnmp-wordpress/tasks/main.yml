@@ -12,5 +12,5 @@
 - include_tasks: install-mysql.yml
   when: ansible_os_family == 'RedHat'
 
-#- include_tasks: install-wordpress.yml
+- include_tasks: install-wordpress.yml
   
