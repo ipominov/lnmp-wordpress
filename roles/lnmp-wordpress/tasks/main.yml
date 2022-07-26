@@ -1,6 +1,6 @@
 ---
 
-- include_tasks: prepare_centos.yml
+- include_tasks: prepare_os.yml
   when: ansible_os_family == 'RedHat'
 
 - include_tasks: install-nginx.yml
