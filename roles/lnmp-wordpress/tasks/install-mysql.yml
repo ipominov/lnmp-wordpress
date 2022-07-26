@@ -5,6 +5,14 @@
     name: mariadb-server
     state: present
 
+- name: Install needful soft
+  dnf:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - python3-pip
+    - tar
+
 - name: install pymysql python module via pip
   pip:
     name: pymysql
@@ -16,13 +24,25 @@
     state: started
     enabled: yes
 
+- name: Check if root password is set
+  shell: >
+    mysqladmin -u root status
+  changed_when: false
+  failed_when: false
+  register: root_pwd_check
+
 - name: Set MariaDB root password for the first time (root@localhost)
   mysql_user:
     name: root
     password: "{{ mysql_root_password }}"
-    host: localhost
+    host: "{{ item }}"
     login_unix_socket: "/var/lib/mysql/mysql.sock"
     state: present
+  with_items:
+    - ::1
+    - 127.0.0.1
+    - "{{ ansible_fqdn }}"
+  when: root_pwd_check.rc == 0
 
 - name: create a new database  
   mysql_db: 
