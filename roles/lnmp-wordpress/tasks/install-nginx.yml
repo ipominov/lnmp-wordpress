@@ -1,7 +1,7 @@
 ---
 
 - name: Install nginx stable
-  yum:
+  dnf:
     name: nginx
     state: present
 
